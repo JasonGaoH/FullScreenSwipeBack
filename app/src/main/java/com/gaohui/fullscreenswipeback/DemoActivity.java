@@ -12,6 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.RadioGroup;
 
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
@@ -34,6 +36,8 @@ public class DemoActivity extends SwipeBackActivity implements View.OnClickListe
     private SwipeBackLayout mSwipeBackLayout;
 
     private Toolbar mToolbar;
+
+    private CheckBox mFullScreenBackCheckBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,21 @@ public class DemoActivity extends SwipeBackActivity implements View.OnClickListe
                 saveTrackingMode(edgeFlag);
             }
         });
+
+        mFullScreenBackCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                int edgeFlag = SwipeBackLayout.EDGE_LEFT;
+                mSwipeBackLayout.setEdgeTrackingEnabled(edgeFlag);
+                saveTrackingMode(edgeFlag);
+                mTrackingModeGroup.check(R.id.mode_left);
+
+                mSwipeBackLayout.setSupportFullScreenBack(b);
+
+
+            }
+        });
+
         mSwipeBackLayout.addSwipeListener(new SwipeBackLayout.SwipeListener() {
             @Override
             public void onScrollStateChange(int state, float scrollPercent) {
@@ -125,7 +144,10 @@ public class DemoActivity extends SwipeBackActivity implements View.OnClickListe
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         findViewById(R.id.btn_start).setOnClickListener(this);
         findViewById(R.id.btn_finish).setOnClickListener(this);
+        findViewById(R.id.viewpager_activity).setOnClickListener(this);
+        findViewById(R.id.recyclerView_activity).setOnClickListener(this);
         mTrackingModeGroup = (RadioGroup) findViewById(R.id.tracking_mode);
+        mFullScreenBackCheckBox = (CheckBox) findViewById(R.id.full_screen_back);
     }
 
     private int[] getColors() {
@@ -158,6 +180,12 @@ public class DemoActivity extends SwipeBackActivity implements View.OnClickListe
                 break;
             case R.id.btn_finish:
                 scrollToFinishActivity();
+                break;
+            case R.id.viewpager_activity:
+                startActivity(new Intent(DemoActivity.this, ViewPagerActivity.class));
+                break;
+            case R.id.recyclerView_activity:
+                startActivity(new Intent(DemoActivity.this, RecyclerViewActivity.class));
                 break;
         }
     }

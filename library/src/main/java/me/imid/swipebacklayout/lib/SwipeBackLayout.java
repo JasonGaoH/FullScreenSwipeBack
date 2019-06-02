@@ -124,6 +124,11 @@ public class SwipeBackLayout extends FrameLayout {
      */
     private int mTrackingEdge;
 
+    /**
+     * 是否支持全屏侧滑
+     */
+    private boolean isSupportFullScreenBack;
+
     public SwipeBackLayout(Context context) {
         this(context, null);
     }
@@ -159,6 +164,15 @@ public class SwipeBackLayout extends FrameLayout {
         final float minVel = MIN_FLING_VELOCITY * density;
         mDragHelper.setMinVelocity(minVel);
         mDragHelper.setMaxVelocity(minVel * 2f);
+    }
+
+    public void setSupportFullScreenBack(boolean supportFullScreenBack) {
+        isSupportFullScreenBack = supportFullScreenBack;
+        mDragHelper.setFullScreenBack(supportFullScreenBack);
+    }
+
+    public void setTargetHorizontalScrollView(View view) {
+        mDragHelper.setTargetHorizontalScrollView(view);
     }
 
     /**

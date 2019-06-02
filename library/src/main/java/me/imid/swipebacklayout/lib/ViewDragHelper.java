@@ -150,6 +150,18 @@ public class ViewDragHelper {
 
     private final ViewGroup mParentView;
 
+    private boolean mSupportFullScreenBack;
+
+    private View mTargetHorizontalScrollView;
+
+    void setTargetHorizontalScrollView(View view) {
+        mTargetHorizontalScrollView = view;
+    }
+
+    public void setFullScreenBack(boolean supportFullScreenBack) {
+        mSupportFullScreenBack = supportFullScreenBack;
+    }
+
     /**
      * A Callback is used as a communication channel with the me.imid.swipebacklayout.lib.ViewDragHelper
      * back to the parent view using it. <code>on*</code>methods are invoked on
@@ -1362,13 +1374,31 @@ public class ViewDragHelper {
         final boolean checkHorizontal = mCallback.getViewHorizontalDragRange(child) > 0;
         final boolean checkVertical = mCallback.getViewVerticalDragRange(child) > 0;
 
-        if (checkHorizontal && checkVertical) {
-            return dx * dx + dy * dy > mTouchSlop * mTouchSlop;
-        } else if (checkHorizontal) {
-            return Math.abs(dx) > mTouchSlop;
-        } else if (checkVertical) {
-            return Math.abs(dy) > mTouchSlop;
+        if(mSupportFullScreenBack) {
+            //mTargetHorizontalScrollView可以左右滑动的情况下不拦截事件，交给子View处理
+            if(mTargetHorizontalScrollView != null && mTargetHorizontalScrollView.canScrollHorizontally(1) && dx < -mTouchSlop) {
+                return false;
+            } else if(mTargetHorizontalScrollView != null && mTargetHorizontalScrollView.canScrollHorizontally(-1) && dx > mTouchSlop) {
+                return false;
+            } else if(dx < -mTouchSlop) {
+                //全屏返回情况下，左滑默认都不需要拦截
+                return false;
+            } else if (checkHorizontal) {
+                //避免误触侧滑
+                return Math.abs(dx) > mTouchSlop && Math.abs(dx) > Math.abs(dy);
+            } else if (checkVertical) {
+                return Math.abs(dy) > mTouchSlop;
+            }
+        } else {
+            if (checkHorizontal && checkVertical) {
+                return dx * dx + dy * dy > mTouchSlop * mTouchSlop;
+            } else if (checkHorizontal) {
+                return Math.abs(dx) > mTouchSlop;
+            } else if (checkVertical) {
+                return Math.abs(dy) > mTouchSlop;
+            }
         }
+
         return false;
     }
 
@@ -1573,6 +1603,6 @@ public class ViewDragHelper {
         if (y > mParentView.getBottom() - mEdgeSize)
             result = EDGE_BOTTOM;
 
-        return result;
+        return mSupportFullScreenBack ? EDGE_LEFT: result;
     }
 }

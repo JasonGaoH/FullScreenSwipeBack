@@ -10,4 +10,10 @@
     <string name="tracking_mode_bottom">Bottom</string>
     <string name="tracking_mode_all">All</string>
 
+    <string name="full_back_swipe_back">FullBackSwipeBack</string>
+
+    <string name="viewpager_activity">使用ViewPager时，全屏侧滑兼容</string>
+    <string name="recyclerView_activity">使用RecyclerView时，全屏侧滑兼容</string>
+    <string name="support_full_screen_back">支持全屏侧滑</string>
+
 </resources>
