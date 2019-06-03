@@ -160,6 +160,12 @@ public class ViewDragHelper {
 
     public void setFullScreenBack(boolean supportFullScreenBack) {
         mSupportFullScreenBack = supportFullScreenBack;
+
+        if(mInitialEdgeTouched != null) {
+            // 子View在触摸事件处理过程中如果需要禁用全屏侧滑返回, 这里需要重置mInitialEdgeTouched.
+            Arrays.fill(mInitialEdgeTouched, 0);
+        }
+
     }
 
     /**

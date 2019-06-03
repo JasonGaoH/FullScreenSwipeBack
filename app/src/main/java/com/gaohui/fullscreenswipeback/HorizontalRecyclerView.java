@@ -13,15 +13,10 @@ public class HorizontalRecyclerView extends RecyclerView {
     private float lastX = 0f;
     private float lastY = 0f;
     private static final float mRatio = 1.25f;
-    private static final long QUICK_SLIDE = 600;
 
     private boolean flag  = true;
 
-    private long lastTime = 0,currentTime = 0;
-
     private boolean isSupportFullScreenBack = false;
-
-    private boolean isNeedFixQuickSlide = false;
 
     public HorizontalRecyclerView(Context context) {
         super(context);
@@ -63,14 +58,12 @@ public class HorizontalRecyclerView extends RecyclerView {
         float y = e.getRawY();
         switch (e.getAction()) {
             case MotionEvent.ACTION_DOWN:
-//                requestInterceptTouchEvent(x,y,true);
                 getParent().requestDisallowInterceptTouchEvent(true);
-//                //这里设置false是防止在ACTION_DOWN里面直接让子View获取事件，因为这里是否需要消费事件是根据手指滑动方向来确定的
-//                //因为这里是用flag && super.onInterceptTouchEvent(e)两个变量来确定是否需要拦截事件
+                //这里设置false是防止在ACTION_DOWN里面直接让子View获取事件，因为这里是否需要消费事件是根据手指滑动方向来确定的
+                //因为这里是用flag && super.onInterceptTouchEvent(e)两个变量来确定是否需要拦截事件
                 flag = false;
                 lastX = x;
                 lastY = y;
-                collectTouchEventInterval();
                 break;
             case MotionEvent.ACTION_MOVE:
                 float dx = x - lastX;
@@ -79,14 +72,7 @@ public class HorizontalRecyclerView extends RecyclerView {
                 int lastCompletelyVisibleItemPosition = manager.findLastCompletelyVisibleItemPosition();
                 int itemCount = manager.getItemCount();
                 if(firstCompletelyVisibleItemPosition == 0  && dx >0) {
-                    //当前在第一张图片且向左滑动，不拦截
-//                    if(isNeedFixQuickSlide) {
-//                        //左滑finish页面的时候，如果两次事件小于600ms，需要拦截滑动
-//                        requestInterceptTouchEvent(x,y,true);
-//                        isNeedFixQuickSlide = false;
-//                    } else {
-                        requestInterceptTouchEvent(x,y,false);
-//                    }
+                    requestInterceptTouchEvent(x,y,false);
                     break;
                 } else if(firstCompletelyVisibleItemPosition == 0  && dx <0) {
                     //当前在第一张图片且向右滑动，拦截
@@ -123,19 +109,6 @@ public class HorizontalRecyclerView extends RecyclerView {
         }
         //这里必须要保证super.onInterceptTouchEvent(e)在flag为false的时候能够调用一次，否则RecyclerView将不会响应onTouchEvent
         return super.onInterceptTouchEvent(e) && flag;
-    }
-
-
-    private void collectTouchEventInterval() {
-        if(lastTime == 0) {
-            lastTime = System.currentTimeMillis();
-        } else {
-            currentTime = System.currentTimeMillis();
-            if(currentTime - lastTime < QUICK_SLIDE) {
-                isNeedFixQuickSlide = true;
-            }
-            lastTime = 0;
-        }
     }
 
     private void requestInterceptTouchEvent(float x,float y,boolean isIntercept) {

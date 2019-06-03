@@ -3,9 +3,10 @@ package com.gaohui.fullscreenswipeback;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSnapHelper;
+import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -19,7 +20,8 @@ public class SimpleImageViewHolder extends RecyclerView.ViewHolder  {
         super(itemView);
         mImageRecyclerView = itemView.findViewById(R.id.image_recycler_view);
         mImageRecyclerView.setSupportFullScreenBack(true);
-        new LinearSnapHelper().attachToRecyclerView(mImageRecyclerView);
+
+        new PagerSnapHelper().attachToRecyclerView(mImageRecyclerView);
     }
 
     public void initImages() {
@@ -36,6 +38,7 @@ public class SimpleImageViewHolder extends RecyclerView.ViewHolder  {
         ImageAdapter imageAdapter = new ImageAdapter(data);
 
         mImageRecyclerView.setAdapter(imageAdapter);
+
         imageAdapter.notifyDataSetChanged();
     }
 
@@ -46,6 +49,13 @@ public class SimpleImageViewHolder extends RecyclerView.ViewHolder  {
             super(itemView);
             imageView = itemView.findViewById(R.id.image_view);
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            imageView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    return true;
+
+                }
+            });
         }
 
         public void setImage(Drawable o) {
