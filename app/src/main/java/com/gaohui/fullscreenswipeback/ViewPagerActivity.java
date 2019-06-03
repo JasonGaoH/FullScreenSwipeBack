@@ -46,7 +46,6 @@ public class ViewPagerActivity extends SwipeBackActivity {
 
             @Override
             public void onViewDetachedFromWindow(View view) {
-                getSwipeBackLayout().setTargetHorizontalScrollView(viewPager);
             }
         });
     }
