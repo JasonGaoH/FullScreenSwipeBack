@@ -11,7 +11,7 @@ FullScreenSwipeBack是基于  [SwipeBackLayout](https://github.com/ikew0ng/Swipe
 
 ### 兼容横滑RecyclerView
 
-![image](https://raw.githubusercontent.com/JasonGaoH/FullScreenSwipeBack/master/images/full_screen_back_viewpager.gif)
+![image](https://raw.githubusercontent.com/JasonGaoH/FullScreenSwipeBack/master/images/full_screen_back_recyclerview.gif)
 
 具体使用：
 
